@@ -81,15 +81,15 @@ public class VirtualAspectRatio implements ClientModInitializer {
      */
     public static Matrix4f varBasicMatrix(MinecraftClient mc, double fov, float zoom, float zoomX, float zoomY, float farPlaneView) {
         var matrixStack = new MatrixStack();
-        matrixStack.peek().getPositionMatrix().loadIdentity();
+        matrixStack.peek().getModel().loadIdentity();
         if (zoom != 1F) {
             matrixStack.translate(zoomX, -zoomY, 0D);
             matrixStack.scale(zoom, zoom, 1F);
         }
-        matrixStack.peek().getPositionMatrix().multiply(Matrix4f.viewboxMatrix(fov, VARConfig.aspectRatioLog *
+        matrixStack.peek().getModel().multiply(Matrix4f.viewboxMatrix(fov, VARConfig.aspectRatioLog *
                         (VARConfig.respectDisplayRatio?((float)mc.getWindow().getFramebufferWidth() /
                                 (float)mc.getWindow().getFramebufferHeight()):1F),
                 0.05F, farPlaneView));
-        return matrixStack.peek().getPositionMatrix();
+        return matrixStack.peek().getModel();
     }
 }
