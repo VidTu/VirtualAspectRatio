@@ -1,0 +1,41 @@
+plugins {
+	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'maven-publish'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = "VirtualAspectRatio-1.18"
+version = "1.0"
+
+repositories {
+	maven { url "https://maven.terraformersmc.com/releases" }
+	maven { url "https://api.modrinth.com/maven" }
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:1.18.1"
+	mappings "net.fabricmc:yarn:1.18.1+build.17:v2"
+	modImplementation "net.fabricmc:fabric-loader:0.12.12"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:0.45.1+1.18"
+	modImplementation "com.terraformersmc:modmenu:3.0.1"
+	modRuntimeOnly "maven.modrinth:lazydfu:0.1.2"
+}
+
+processResources {
+	inputs.property "version", project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}

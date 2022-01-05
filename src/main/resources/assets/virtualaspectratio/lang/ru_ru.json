@@ -1,0 +1,12 @@
+{
+  "virtualaspectratio.config": "Конфигурация VirtualAspectRatio",
+  "virtualaspectratio.enabled": "Включить",
+  "virtualaspectratio.hand": "Влиять на руку",
+  "virtualaspectratio.aspectratio": "Соотнош. сторон (X к Y)",
+  "virtualaspectratio.respectdisplayratio": "Использовать соотношение монитора",
+  "virtualaspectratio.toggle": "Переключить",
+  "virtualaspectratio.toggle.on": "VirtualAspectRatio включён.",
+  "virtualaspectratio.toggle.off": "VirtualAspectRatio выключен.",
+  "virtualaspectratio.servertoggle.on": "VirtualAspectRatio разрешён сервером.",
+  "virtualaspectratio.servertoggle.off": "VirtualAspectRatio запрещён сервером."
+}

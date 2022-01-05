@@ -1,0 +1,12 @@
+{
+  "virtualaspectratio.config": "VirtualAspectRatio Config",
+  "virtualaspectratio.enabled": "Enable",
+  "virtualaspectratio.hand": "Affect hand",
+  "virtualaspectratio.aspectratio": "Aspect Ratio (X to Y)",
+  "virtualaspectratio.respectdisplayratio": "Respect Display Ratio",
+  "virtualaspectratio.toggle": "Toggle",
+  "virtualaspectratio.toggle.on": "VirtualAspectRatio is enabled.",
+  "virtualaspectratio.toggle.off": "VirtualAspectRatio is disabled.",
+  "virtualaspectratio.servertoggle.on": "VirtualAspectRatio is allowed by the server.",
+  "virtualaspectratio.servertoggle.off": "VirtualAspectRatio is disallowed by the server."
+}
