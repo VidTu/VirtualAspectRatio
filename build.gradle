@@ -3,10 +3,10 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = "VirtualAspectRatio-1.17"
+archivesBaseName = "VirtualAspectRatio-1.16"
 version = "1.0"
 
 repositories {
@@ -15,11 +15,11 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.17.1"
-	mappings "net.fabricmc:yarn:1.17.1+build.65:v2"
+	minecraft "com.mojang:minecraft:1.16.5"
+	mappings "net.fabricmc:yarn:1.16.5+build.10:v2"
 	modImplementation "net.fabricmc:fabric-loader:0.12.12"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:0.45.1+1.17"
-	modImplementation "com.terraformersmc:modmenu:2.0.14"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:0.42.0+1.16"
+	modImplementation "com.terraformersmc:modmenu:1.16.22"
 	modRuntimeOnly "maven.modrinth:lazydfu:0.1.2"
 }
 
@@ -31,7 +31,10 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 16
+	it.options.encoding = "UTF-8"
+	if (JavaVersion.current().isJava9Compatible()) {
+		it.options.release = 8
+	}
 }
 
 jar {

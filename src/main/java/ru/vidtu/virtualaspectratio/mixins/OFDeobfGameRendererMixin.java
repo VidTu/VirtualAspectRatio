@@ -1,6 +1,7 @@
 package ru.vidtu.virtualaspectratio.mixins;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
@@ -25,22 +26,24 @@ public abstract class OFDeobfGameRendererMixin {
 
     @Shadow private float zoomY;
 
-    @Shadow public abstract float method_32796();
-
-    @Shadow public abstract Matrix4f getBasicProjectionMatrix(double fov);
-
     @Shadow @Final
     private MinecraftClient client;
 
-    @Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;getBasicProjectionMatrix(D)Lnet/minecraft/util/math/Matrix4f;"))
-    public Matrix4f renderWorld_getBasicProjectionMatrix(GameRenderer gr, double fov) {
-        if (VARConfig.enabled && !VARConfig.disallowed) return VirtualAspectRatio.varBasicMatrix(client, fov, zoom, zoomX, zoomY, method_32796());
-        return getBasicProjectionMatrix(fov);
+    @Shadow public abstract Matrix4f getBasicProjectionMatrix(Camera camera, float f, boolean bl);
+
+    @Shadow private float viewDistance;
+
+    @Shadow protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
+
+    @Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;getBasicProjectionMatrix(Lnet/minecraft/client/render/Camera;FZ)Lnet/minecraft/util/math/Matrix4f;"))
+    public Matrix4f renderWorld_getBasicProjectionMatrix(GameRenderer gr, Camera camera, float f, boolean bl) {
+        if (VARConfig.enabled && !VARConfig.disallowed) return VirtualAspectRatio.varBasicMatrix(client, getFov(camera, f, bl), zoom, zoomX, zoomY, viewDistance * 4F);
+        return getBasicProjectionMatrix(camera, f, bl);
     }
 
-    @Redirect(method = "Lnet/minecraft/client/render/GameRenderer;renderHand(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/Camera;FZZZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;getBasicProjectionMatrix(D)Lnet/minecraft/util/math/Matrix4f;"), remap = false)
-    public Matrix4f renderHand_getBasicProjectionMatrix_OF(GameRenderer gr, double fov) {
-        if (VARConfig.enabled && !VARConfig.disallowed && VARConfig.hand) return VirtualAspectRatio.varBasicMatrix(client, fov, zoom, zoomX, zoomY, method_32796());
-        return getBasicProjectionMatrix(fov);
+    @Redirect(method = "Lnet/minecraft/client/render/GameRenderer;renderHand(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/Camera;FZZZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;getBasicProjectionMatrix(Lnet/minecraft/client/render/Camera;FZ)Lnet/minecraft/util/math/Matrix4f;"), remap = false)
+    public Matrix4f renderHand_getBasicProjectionMatrix_OF(GameRenderer gr, Camera camera, float f, boolean bl) {
+        if (VARConfig.enabled && !VARConfig.disallowed && VARConfig.hand) return VirtualAspectRatio.varBasicMatrix(client, getFov(camera, f, bl), zoom, zoomX, zoomY, viewDistance * 4F);
+        return getBasicProjectionMatrix(camera, f, bl);
     }
 }

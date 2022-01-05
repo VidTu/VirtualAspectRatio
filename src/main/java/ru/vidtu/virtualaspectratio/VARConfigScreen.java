@@ -2,7 +2,6 @@ package ru.vidtu.virtualaspectratio;
 
 import net.minecraft.client.font.MultilineText;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
@@ -47,18 +46,18 @@ public class VARConfigScreen extends Screen {
     @Override
     public void init() {
         if (enabled != null) removed();
-        enabled = addDrawableChild(new ListenerCheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("virtualaspectratio.enabled")) / 2 - 12,
+        enabled = addButton(new ListenerCheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("virtualaspectratio.enabled")) / 2 - 12,
                 20, 24 + textRenderer.getWidth(new TranslatableText("virtualaspectratio.enabled")), 20,
                 new TranslatableText("virtualaspectratio.enabled"), VARConfig.enabled, cb -> VARConfig.enabled = cb.isChecked()));
-        hand = addDrawableChild(new ListenerCheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("virtualaspectratio.hand")) / 2 - 12,
+        hand = addButton(new ListenerCheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("virtualaspectratio.hand")) / 2 - 12,
                 44, 24 + textRenderer.getWidth(new TranslatableText("virtualaspectratio.hand")), 20,
                 new TranslatableText("virtualaspectratio.hand"), VARConfig.hand, cb -> VARConfig.hand = cb.isChecked()));
-        aspectRatio = addDrawableChild(new SliderWidget(width / 2 - 75, 68, 150, 20,
-                ScreenTexts.composeGenericOptionText(new TranslatableText("virtualaspectratio.aspectratio"),
+        aspectRatio = addButton(new SliderWidget(width / 2 - 75, 68, 150, 20,
+                new TranslatableText("options.generic_value", new TranslatableText("virtualaspectratio.aspectratio"),
                         new LiteralText(FORMAT.format(VARConfig.aspectRatioLog))), VARConfig.aspectRatio) {
             @Override
             public void updateMessage() {
-                setMessage(ScreenTexts.composeGenericOptionText(new TranslatableText("virtualaspectratio.aspectratio"),
+                setMessage(new TranslatableText("options.generic_value", new TranslatableText("virtualaspectratio.aspectratio"),
                         new LiteralText(FORMAT.format(value < 0.5D?value * 1.8F + 0.1F:(value - 0.5F) * 18F + 1F))));
             }
 
@@ -68,10 +67,10 @@ public class VARConfigScreen extends Screen {
                 VARConfig.calculateRatio();
             }
         });
-        respectDisplayRatio = addDrawableChild(new ListenerCheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("virtualaspectratio.respectdisplayratio")) / 2 - 12,
+        respectDisplayRatio = addButton(new ListenerCheckboxWidget(width / 2 - textRenderer.getWidth(new TranslatableText("virtualaspectratio.respectdisplayratio")) / 2 - 12,
                 92, 24 + textRenderer.getWidth(new TranslatableText("virtualaspectratio.respectdisplayratio")), 20,
                 new TranslatableText("virtualaspectratio.respectdisplayratio"), VARConfig.respectDisplayRatio, cb -> VARConfig.respectDisplayRatio = cb.isChecked()));
-        addDrawableChild(new ButtonWidget(width / 2 - 100, height - 24, 200, 20, new TranslatableText("gui.done"), btn -> client.setScreen(prev)));
+        addButton(new ButtonWidget(width / 2 - 100, height - 24, 200, 20, new TranslatableText("gui.done"), btn -> client.openScreen(prev)));
         warnText = MultilineText.create(textRenderer, new TranslatableText("virtualaspectratio.servertoggle.off")
                 .formatted(Formatting.RED).formatted(Formatting.BOLD), width - 15);
     }

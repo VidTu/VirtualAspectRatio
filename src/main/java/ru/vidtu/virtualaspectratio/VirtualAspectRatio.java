@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.math.MatrixStack;
@@ -54,7 +55,7 @@ public class VirtualAspectRatio implements ClientModInitializer {
                 }
             }
             if (keyBindConfigGui.wasPressed()) {
-                mc.setScreen(new VARConfigScreen(null));
+                mc.openScreen(new VARConfigScreen(null));
             }
         });
         ClientPlayConnectionEvents.JOIN.register((h, s, c) -> VARConfig.disallowed = false);
@@ -70,17 +71,17 @@ public class VirtualAspectRatio implements ClientModInitializer {
     }
 
     /**
-     * Implementation of {@link net.minecraft.client.render.GameRenderer#getBasicProjectionMatrix(double)} using custom {@link VARConfig#aspectRatio}.
+     * Implementation of {@link net.minecraft.client.render.GameRenderer#getBasicProjectionMatrix(Camera, float, boolean)} (double)} using custom {@link VARConfig#aspectRatio}.
      * @param mc Minecraft client instance
-     * @param fov FOV parameter from the {@link net.minecraft.client.render.GameRenderer#getBasicProjectionMatrix(double)} method
+     * @param fov FOV parameter from the {@link GameRenderer#getFov(Camera, float, boolean)} method (<code>private</code>)
      * @param zoom Zoom field from the {@link net.minecraft.client.render.GameRenderer} class
      * @param zoomX Zoom X field from the {@link net.minecraft.client.render.GameRenderer} class
      * @param zoomY Zoom Y field from the {@link net.minecraft.client.render.GameRenderer} class
-     * @param farPlaneView Return value of the the {@link GameRenderer#method_32796()} method
+     * @param farPlaneView Return value of the the {@link GameRenderer#getViewDistance()} method multiplied by 4
      * @return Coolest basic matrix. (and wide)
      */
     public static Matrix4f varBasicMatrix(MinecraftClient mc, double fov, float zoom, float zoomX, float zoomY, float farPlaneView) {
-        var matrixStack = new MatrixStack();
+        MatrixStack matrixStack = new MatrixStack();
         matrixStack.peek().getModel().loadIdentity();
         if (zoom != 1F) {
             matrixStack.translate(zoomX, -zoomY, 0D);

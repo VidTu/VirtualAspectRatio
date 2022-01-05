@@ -6,7 +6,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.render.GameRenderer;
 
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * A configuration class for VirtualAspectRatio mod.
@@ -54,9 +56,9 @@ public class VARConfig {
      */
     public static void load() {
         try {
-            var p = FabricLoader.getInstance().getConfigDir().resolve("virtualaspectratio.json");
+            Path p = FabricLoader.getInstance().getConfigDir().resolve("virtualaspectratio.json");
             if (Files.exists(p)) {
-                GSON.fromJson(Files.readString(p), VARConfig.class);
+                GSON.fromJson(new String(Files.readAllBytes(p), StandardCharsets.UTF_8), VARConfig.class);
             }
         } catch (Throwable t) {
             VirtualAspectRatio.LOG.warn("Unable to load VAR config", t);
@@ -76,9 +78,9 @@ public class VARConfig {
      */
     public static void save() {
         try {
-            var p = FabricLoader.getInstance().getConfigDir().resolve("virtualaspectratio.json");
+            Path p = FabricLoader.getInstance().getConfigDir().resolve("virtualaspectratio.json");
             Files.createDirectories(p.getParent());
-            Files.writeString(p, GSON.toJson(new VARConfig()));
+            Files.write(p, GSON.toJson(new VARConfig()).getBytes(StandardCharsets.UTF_8));
         } catch (Throwable t) {
             VirtualAspectRatio.LOG.warn("Unable to save VAR config", t);
         }
